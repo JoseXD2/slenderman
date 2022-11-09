@@ -8,12 +8,9 @@ import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
 import openfl.net.URLRequest;
 import openfl.Lib;
-
+import openfl.utils.Assets;
 
 using StringTools;
-#if sys
-import sys.FileSystem;
-#end
 
 class MainMenuState extends MusicBeatState
 {
@@ -62,8 +59,10 @@ class MainMenuState extends MusicBeatState
             loops++;
         }
 
-        #if sys
-        for (i in FileSystem.readDirectory("assets/images/menushit")) {
+        #if android
+	var list = Assets.list();
+        for (i in list.filter(text -> text.contains("assets/images/menushit")));
+	{
             if (i.startsWith("page") && i.endsWith(".png")) {
                 var num = Std.parseInt(i.substring(4, i.length - 4).trim());
                 if (num != null && num > quant)
@@ -79,6 +78,10 @@ class MainMenuState extends MusicBeatState
 
         spawnBG();
 
+	#if android
+	addVirtualPad(UP_DOWN, A_B);
+	#end
+	    
         super.create();
     }
 
